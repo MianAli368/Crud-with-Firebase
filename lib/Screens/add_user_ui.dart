@@ -16,7 +16,14 @@ class _AddUserState extends State<AddUser> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: const Text("Add User")),
+
+        body: Column(
+          children: [
+            Text("Add User")
+          ],
+        ),
       ),
+    
     );
   }
 }
