@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.brown),
-      home: const MyHomePage(),
-      // home: const AddUser(),
+      // home: const MyHomePage(),
+      home: const AddUser(),
     );
   }
 }
@@ -87,8 +87,10 @@ Future CreateUserwithName({required String name}) async {
   // };
 
   // Replacing json with User Object;
-  final user =
-      User(id: docUser.id, name: name, age: 21, birthday: DateTime(2001, 7, 8));
+  final user = User(
+    id: docUser.id, name: name, age: 21,
+    // birthday: DateTime(2001, 7, 8)
+  );
   // Converting user to Json
   final json = user.toJson();
 
