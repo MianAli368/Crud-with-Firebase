@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud/Screens/view_singler_user_ui.dart';
 import 'package:crud/Screens/view_users_ui.dart';
 import 'package:crud/models/userModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,17 +85,61 @@ class _AddUserState extends State<AddUser> {
                       MaterialPageRoute(
                           builder: ((context) => const ViewUsers())));
                 },
-                child: const Text("Show Users"))
+                child: const Text("Show Users")),
+
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => const SingleUser())));
+                },
+                child: const Text("Show Single User")),
+
+            ElevatedButton(
+                onPressed: () {
+                  final docUser =
+                      FirebaseFirestore.instance.collection("users").doc("2");
+
+                  // update specifi fields.
+                  docUser.update({"name": "Alia"});
+
+                  // if you have nested values.
+                  // docUser.update({"city.name": "sydney"});
+
+                  // set method will replace all of the data with our provided data
+                  // docUser.set({
+                  //   "name": "Aliata"
+                  // });
+                },
+                child: const Text("Update")),
+
+            ElevatedButton(
+                onPressed: () {
+                  final docUser =
+                      FirebaseFirestore.instance.collection("users").doc("2");
+
+                  // delete specific field.
+                  // docUser.update({"name": FieldValue.delete()});
+
+                  // // delete all document.
+                  docUser.delete();
+                },
+                child: const Text("Delete"))
           ],
         ),
       ),
     );
   }
 
+  // Create User
   Future createUser(User user, String id) async {
     final docUser = FirebaseFirestore.instance.collection("users").doc(id);
     final json = user.toJson();
     await docUser.set(json);
     print("User Created");
   }
+
+  // Update User
+
 }

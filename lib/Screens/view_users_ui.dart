@@ -13,22 +13,18 @@ class ViewUsers extends StatefulWidget {
 }
 
 class _ViewUsersState extends State<ViewUsers> {
-  Stream<List<User>>? userList;
-  Stream<List<User>>? readUsers() {
-    // snapshots use to fetch all data from users.
-    userList = FirebaseFirestore.instance
-        .collection("users")
-        .snapshots()
-        .map((event) =>
-            // Accessing documents of data.
-            event.docs.map((e) =>
-                // Map data to User Type.
-                User.fromJson(
-                    // Accessing data of Documents.
-                    e.data())))
-        .toList() as Stream<List<User>>;
-    return userList;
-  }
+  Stream<List<User>> readUsers() =>
+      // snapshots use to fetch all data from users.
+      FirebaseFirestore.instance
+          .collection("users")
+          .snapshots()
+          .map((snapshot) =>
+              // Accessing documents of data.
+              snapshot.docs.map((doc) =>
+                  // Map data to User Type.
+                  User.fromJson(
+                      // Accessing data of Documents.
+                      doc.data())).toList());
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +33,30 @@ class _ViewUsersState extends State<ViewUsers> {
         appBar: AppBar(
           title: const Text("Users"),
         ),
+        // If dont want realtime changes then change StreamBuilder with FutureBuilder
+        // and readUsers() with readUsers().first
         body: StreamBuilder(
           stream: readUsers(),
           builder: ((context, snapshot) {
             if (!snapshot.hasData) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
-              return Text("Something Went Wrong!");
+              return const Text("Something Went Wrong!");
             } else {
               final user = snapshot.data!;
               return ListView.builder(
                   itemCount: user.length,
                   itemBuilder: ((context, index) {
-                    return Text("Mian Ali");
+                    var userList = user[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        tileColor: Colors.amber,
+                        leading: Text("${userList.id}"),
+                        title: Text("${userList.name}"),
+                        subtitle: Text("${userList.age}"),
+                      ),
+                    );
                   }));
             }
           }),
